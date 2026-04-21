@@ -26,7 +26,7 @@ source("https://inkaverse.com/setup.r")
 ## Field-book
 
 ```{r}
-gs <- "url" %>% 
+gs <- "https://docs.google.com/spreadsheets/d/10O-qCTMryolQLBQICV9gyMJZdMv2-3DpYpFJQx4yLHQ/edit?gid=2081786472#gid=2081786472" %>% 
   as_sheets_id()
 
 fb <- gs %>% 
@@ -67,19 +67,12 @@ label <- fb %>%
                , color = "black"
                , font = font[3]
                ) %>% 
-  include_text(value = "factor1"
+  include_text(value = "luz"
                , position = c(2.6, 2.6)
                , size = 16
                , color = "blue"
                , font = font[1]
-               , prefix = "Factor1: "
-               ) %>% 
-  include_text(value = "factor2"
-               , position = c(2.6, 1.8)
-               , size = 15
-               , color = "red"
-               , font = font[1]
-               , prefix = "Factor2: "
+               , prefix = "luz: "
                ) %>% 
   include_image(
     value = "https://huito.inkaverse.com/img/scale.pdf"
@@ -97,7 +90,7 @@ label %>% label_print(mode = "preview")
 label %>% 
   label_print(mode = "complete"
               , filename = "design/labels"
-              , paper = c(100, 100)
+              , paper = c(21, 29.7)
               , units = "cm"
               )
 ```

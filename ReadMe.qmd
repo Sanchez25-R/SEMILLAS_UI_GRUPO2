@@ -1,48 +1,28 @@
-**Manuscript Title**
+**Evaluación de la germinación de semillas de Arveja con y sin luz**
 
-Author List
+El presente estudio evalúa el efecto de la luz sobre la germinación y el crecimiento inicial de semillas de arveja (Pisum sativum), una especie de gran importancia agrícola y alimentaria. La germinación es un proceso fisiológico fundamental que marca el inicio del desarrollo de la planta y está influenciado por diversos factores ambientales, entre los cuales la luz puede desempeñar un papel regulador dependiendo de la especie.
 
----
+En este experimento se compararon dos condiciones: presencia de luz y ausencia de luz (oscuridad), con el fin de determinar si este factor afecta el porcentaje de germinación y el desarrollo inicial de las plántulas. Para ello, se registró el número de semillas germinadas a lo largo del tiempo y se evaluaron características de crecimiento como la longitud de las plántulas.
 
-## Manuscript
+Author: 
 
-> Google Docs link
+JHAN FRANCO CASTRO CAJO 
+ROYBER CHUQUIZUTA GUELAC
+RUBEN SANCHEZ ALVARADO 
+EMERSON SANTOS PELAEZ 
+JHONEYDA EMELIS VERA CAMPOS 
+
 
 ## Database
 
-> Google Sheets link
+> https://docs.google.com/spreadsheets/d/10O-qCTMryolQLBQICV9gyMJZdMv2-3DpYpFJQx4yLHQ/edit?gid=2079223155#gid=2079223155
 
-## Presentation
+## Reporte _ pagina web
 
-> Google Slides link
+> file:///C:/SEMILLAS_U1_GIT/SEMILLAS_UI_GRUPO2/Pag_web.html
 
----
 
-⇒ *SciHub*: research pipeline repository
+⇒ *Documentos REPORTE 1*
 
-project-root/
-  ├── analysis.qmd          # Script with data analysis
-  ├── article.qmd           # Script for formatting the article
-  ├── article.zip           # Zipped file in Markdown from Articul8
-  ├── design/               # Experimental design and setup
-  │   ├── design                # Information of experimental setup and planning
-  │   └── labels.pdf            # Labels script from experiments
-  ├── files/                # Supporting files for the project
-  │   ├── images/               # Raw and processed images
-  │   ├── zotero/               # Zotero library (.rds)
-  │   └── template.docx         # Journal article template  
-  ├── manuscript/           # Core outputs of the article
-  │   ├── Figures               # Figures for the manuscript (.jpg & .eps)
-  │   ├── ESM                   # Electronic Supplementary Material (ESM)
-  │   └── draft.docx            # Manuscript text versions
-  └── README.qmd            # Article title with authors:
-                                # Manuscript link (Google Docs)
-                                # Database link (Google Sheets)
-                                # Presentation link (Google Slides)
-
----
-
-⇒ *Manuscript template*
-
-> https://docs.google.com/document/d/1B5wtKmWap6MHYjVJqlYy7HMXHWQDoprlz-om2nn777s/edit?usp=sharing
+> https://docs.google.com/document/d/1W6i3mLsVGW27EKXz3hrJEB4LWRL_n30rfakHUOhVF1c/edit?tab=t.0
 

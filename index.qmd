@@ -1,0 +1,311 @@
+---
+title: "EVALUACIÓN DE LA GERMINACIÓN DE SEMILLAS DE ARVEJA CON Y SIN LUZ"
+
+author: "Castro, Sanchez, Vera, Ramirez, Santos"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-location: left     # 🔥 AQUÍ EL CAMBIO
+    toc-title: "Contenido"
+    toc-depth: 3
+    number-sections: true
+
+navbar:
+  background: primary
+  left:
+    - text: "🏠 Inicio"
+      href: index.qmd
+    - text: "📘 Introducción"
+      href: introduccion.qmd
+    - text: "🧪 Materiales y Métodos"
+      href: metodologia.qmd
+    - text: "📊 Análisis"
+      href: analisis.qmd
+    - text: "📈 Resultados"
+      href: resultados.qmd
+    - text: "🧠 Conclusiones"
+      href: conclusiones.qmd
+    - text: "📚 Referencias"
+      href: referencias.qmd
+---
+
+
+
+# INTRODUCCIÓN {#introduccion}
+
+La germinación es una de las etapas más críticas en el ciclo de vida de las plantas, ya que determina el establecimiento exitoso de una nueva generación vegetal. Este proceso inicia con la absorción de agua por parte de la semilla (imbibición), seguido de la activación metabólica del embrión y la posterior emergencia de la radícula, que marca el inicio del crecimiento de la plántula (Bewley et al., 2013).
+El proceso de germinación está influenciado por diversos factores ambientales, entre los cuales destacan la humedad, la temperatura, la disponibilidad de oxígeno y la luz. La luz puede actuar como un factor regulador en ciertas especies vegetales, clasificándo estas como fotoblásticas positivas, negativas o neutras según su respuesta a este estímulo (Taiz et al., 2015).
+
+En el caso de la arveja (Pisum sativum), múltiples estudios han demostrado que su germinación no depende directamente de la luz, lo que la clasifica como una especie fotoblásticamente neutra. Sin embargo, la luz sí tiene un impacto importante en el desarrollo posterior de la plántula, especialmente en la activación de la fotosíntesis y la formación de estructuras foliares funcionales (Hopkins & Hüner, 2009).
+
+Cuando las semillas germinan en ausencia de luz, las plántulas presentan un fenómeno conocido como etioliación, caracterizado por elongación del tallo, menor desarrollo de clorofila y estructuras débiles. En contraste, en condiciones de luz, las plántulas desarrollan un crecimiento más equilibrado, con hojas más expandidas y una mayor capacidad fotosintética (Liscum et al., 2014).
+
+Por lo tanto, el presente estudio tiene como objetivo evaluar la germinación de semillas de arveja bajo condiciones de luz y oscuridad, analizando su efecto en el porcentaje de germinación y en el desarrollo morfológico inicial de las plántulas.
+
+
+# MATERIALES Y MÉTODOS {#metodologia}
+
+2.1 Materiales
+
+- Tapers  
+- Papel toalla  
+- Bolsa negra  
+- Agua mineral  
+- Cuaderno y lápiz  
+- Cinta scotch  
+- Ligas  
+- Regla  
+- Semillas de arveja  
+- Tijera  
+  
+2.2. Diseño experimental
+
+El diseño experimental que se utilizó  fue un Diseño Completamente al Azar (DCA)
+
+- Factor: luz
+  con luz
+  sin luz
+- Repeticiones: 6
+- UE:12
+  
+2.3. Procedimiento
+
+- En primer lugar, se realizó la selección de semillas de alverja (Pisum sativum), considerando aquellas en buen estado, sin daños físicos ni signos de deterioro. Posteriormente, se prepararon 12  tapers, en los cuales se colocó papel toalla.
+
+- Luego, se procedió a humedecer el papel toalla en los 12 tapers utilizando agua mineral, asegurando una adecuada hidratación sin generar exceso de agua. A continuación, se distribuyeron las semillas de alverja de manera uniforme sobre el papel toalla húmedo en cada táper.
+
+- Seguidamente, a los 6 primeros tapers se pegaron los códigos con luz, las cuales se  mantuvieron expuestos a la luz (luz natural), mientras que los 6 siguientes se los codigos sin luz, y se colocaron en bolsas oscuras para no permitir el ingreso de la luz.
+
+- Finalmente, todos los tapers se mantuvieron en condiciones similares de temperatura y humedad, realizando observaciones diarias para registrar el proceso de germinación durante el periodo experimental.
+
+2.4. Variables evaluadas
+
+- Elongación de raíz 
+- Germinación 
+
+# ANÁLISIS DE DATOS {#analisis}
+
+Cargar librerias
+
+```{r}
+source("https://inkaverse.com/setup.r")
+
+library(GerminaR)
+library(dplyr)
+library(ggplot2)
+library(GerminaR)
+library(knitr)
+
+```
+
+Cargar datos
+
+```{r}
+
+url <- "https://docs.google.com/spreadsheets/d/10O-qCTMryolQLBQICV9gyMJZdMv2-3DpYpFJQx4yLHQ/edit?gid=2079223155#gid=2079223155" 
+gs <- url %>% 
+  as_sheets_id()
+
+fb <- gs %>%
+  range_read(range = "fb") %>%
+  mutate(across(c(luz), as.factor))
+
+str(fb) 
+
+
+```
+
+
+Porcentaje de germinación (grp)
+
+```{r}
+
+fb <- fb %>%
+  mutate(
+    tratamiento = factor(luz,
+                         levels = c("no", "si"),
+                         labels = c("Oscuridad", "Luz")),
+    
+    germinadas = ger_7,
+    total = 25,
+    porcentaje = (germinadas / total) * 100
+  )
+
+```
+
+Tabla de resumen 
+
+```{r}
+
+tabla_resumen <- fb %>%
+  group_by(tratamiento) %>%
+  summarise(
+    repeticiones = n(),
+    germ_media = round(mean(porcentaje), 2),
+    germ_sd = round(sd(porcentaje), 2),
+    germ_min = round(min(porcentaje), 2),
+    germ_max = round(max(porcentaje), 2)
+  )
+
+# Mostrar tabla
+tabla_resumen %>%
+  kable(caption = "Tabla de resumen del porcentaje de germinación en arveja")
+
+```
+
+
+Tabla de resultados
+
+```{r}
+
+library(kableExtra)
+
+
+fb_germ <- aov(porcentaje ~ tratamiento, data = fb)
+mc_germ <- ger_testcomp(aov = fb_germ, comp = "tratamiento", type = "snk")
+mc_germ
+kable(mc_germ$table, caption = "Comparación de medias del porcentaje de germinación")
+
+```
+
+
+
+Gráfico de porcentage de germinación
+
+```{r}
+
+ggplot(fb, aes(x = qrcode, y = porcentaje, fill = tratamiento)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Porcentaje de germinación por QR code",
+    x = "QR code",
+    y = "Porcentaje de germinación (%)",
+    fill = "Tratamiento"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+Tiempo medio de germinación (mgt)
+
+```{r}
+
+fb <- fb %>%
+  mutate(
+    trat_val = ifelse(luz == "si", "Luz", "Oscuridad"),
+    acumulado = 24 * (ger_1 + ger_2 + ger_3 + ger_4 + ger_5 + ger_6 + ger_7),
+    total_germ = ger_7,
+    mgt = acumulado / total_germ
+  )
+
+
+```
+
+Longitud de radicula.
+
+```{r}
+
+library(googlesheets4)
+gs <- as_sheets_id("https://docs.google.com/spreadsheets/d/10O-qCTMryolQLBQICV9gyMJZdMv2-3DpYpFJQx4yLHQ/edit?gid=2079223155#gid=2079223155")
+fb <- range_read(gs, range = "fb")
+fb <- fb %>%
+  mutate(longitud_prom = lgr)
+
+```
+
+ANOVA de longitud.
+
+```{r}
+aov(lgr ~ ntreat, data = fb)
+
+
+```
+
+Grafico de longitud. 
+
+```{r}
+
+library(ggplot2)
+
+ggplot(fb, aes(x = ntreat, y = lgr, fill = ntreat)) +
+  geom_boxplot() +
+  labs(
+    title = "Longitud de plántulas bajo luz y oscuridad",
+    x = "ntreat",
+    y = "lgr (cm)"
+  ) +
+  theme_minimal()
+
+geom_boxplot(aes(group = ntreat))
+
+
+```
+
+# RESULTADOS Y DISCUSIÓN {#resultados}
+
+
+4.1. Resultados
+
+Se evaluaron un total de 12 unidades experimentales, de las cuales 6 fueron sometidas a condiciones de luz (códigos: 1001, 1005, 1008, 1010, 1011 y 1012) y 6 a condiciones de oscuridad (códigos 1002, 1003, 1004, 1006, 1007 y 1009 ).
+Durante los primeros días de evaluación (día 0, 1 y 2), no se registró germinación en ninguno de los tratamientos. A partir del día 3, se observó el inicio de la germinación en todos los tapers, tanto en condiciones de luz como de oscuridad, alcanzando valores superiores al 50% de semillas germinadas por unidad experimental.
+
+Para el día 4, se evidenció la germinación total (100%) en la mayoría de los tapers, considerando un total de 25 semillas por unidad experimental. Sin embargo, en los tratamientos sin luz correspondientes a los códigos 1004 y 1006, se registró una ligera variación, alcanzando únicamente 24 semillas germinadas.
+Durante los días 5, 6 y 7, no se presentaron cambios adicionales en el número de semillas germinadas, manteniéndose los valores alcanzados previamente hasta la finalización del experimento.
+
+Adicionalmente, se realizó la medición de la elongación de las raíces en las plántulas durante 5 días, cuyos datos están  por procesarse mediante el software RStudio con el objetivo de determinar posibles diferencias significativas entre los tratamientos con y sin luz. Este análisis permitirá evaluar el efecto de la luz sobre el crecimiento radicular en etapas tempranas del desarrollo.
+
+4.2. Discusiones 
+
+Los resultados obtenidos en el presente estudio evidencian que la germinación de la alverja (Pisum sativum) no depende de la presencia de luz, ya que tanto en condiciones de iluminación como en oscuridad se alcanzaron porcentajes de germinación superiores al 50% al tercer día y cercanos al 100% al cuarto día. Este comportamiento coincide con lo reportado en estudios fisiológicos de semillas de leguminosas, donde se señala que la germinación está principalmente regulada por procesos metabólicos internos, como la respiración celular y la activación enzimática, más que por factores lumínicos (Rodrigues et al., 2023) .
+
+En este sentido, se ha demostrado que durante la germinación de Pisum sativum ocurre un incremento significativo en la actividad respiratoria, particularmente asociado a la vía de la oxidasa alternativa (AOX), la cual cumple un papel clave en la producción de energía y en la regulación del estrés oxidativo en etapas iniciales del desarrollo (Rodrigues et al., 2023) . Esto explica por qué las semillas pueden germinar adecuadamente incluso en ausencia de luz, siempre que existan condiciones favorables de humedad y temperatura.
+Por otro lado, diversos estudios han demostrado que la luz no necesariamente modifica el porcentaje de germinación en alverja, pero sí influye en el crecimiento y desarrollo inicial de la plántula. Por ejemplo, investigaciones sobre el efecto de la luz LED en Pisum sativum indican que la iluminación no altera significativamente la germinación, pero sí mejora el crecimiento de brotes y raíces (Solano et al., 2020) . Esto respalda los resultados obtenidos en el presente ensayo, donde no se observaron diferencias en la germinación, pero se plantea la posibilidad de diferencias en la elongación radicular.
+
+Asimismo, la ligera variación observada en los tratamientos sin luz (tapers 1004 y 1006) puede atribuirse a factores inherentes al material biológico, como la variabilidad en la viabilidad de las semillas o micro diferencias en las condiciones experimentales. Estudios sobre germinación en leguminosas indican que pequeñas variaciones en humedad, oxigenación o calidad fisiológica de la semilla pueden generar diferencias mínimas en el porcentaje final de germinación (Bewley et al., 2013; citado en literatura de fisiología de semillas) .
+
+Finalmente, es importante resaltar que la germinación es un proceso complejo influenciado por múltiples factores, entre ellos agua, temperatura, oxígeno y metabolismo interno, mientras que la luz actúa principalmente en fases posteriores relacionadas con la fotosíntesis y el desarrollo morfológico de la plántula . Por ello, los resultados obtenidos son consistentes con la literatura científica y confirman el comportamiento típico de semillas no fotoblásticas como la alverja.
+
+# CONCLUSIONES {#conclusiones}
+
+La germinación de semillas de alverja (Pisum sativum) ocurre de manera independiente de la presencia de luz, confirmando que esta especie no presenta requerimientos lumínicos para iniciar el proceso germinativo.
+
+El proceso germinativo inició al tercer día en todos los tratamientos, alcanzando valores cercanos al 100% al cuarto día, lo que evidencia una alta viabilidad de las semillas utilizadas.Las pequeñas variaciones observadas en algunos tratamientos sin luz no representan diferencias significativas y se atribuyen a factores experimentales o biológicos.
+
+Finalmente, aunque la luz no influye en la germinación, sí podría afectar el crecimiento inicial de las plántulas, especialmente en la elongación de raíces, lo cual debe ser confirmado mediante análisis estadísticos.
+
+# REFERENCIAS {#referencias}
+
+Rodrigues, L., Nogales, A., Nunes, J., et al. (2023). Germination of Pisum sativum L. seeds is associated with the alternative respiratory pathway. Biology.
+
+Solano, C. J., Hernández, J. A., et al. (2020). Impacts of LEDs in the red spectrum on the germination and early growth of pea (Pisum sativum L.). Agriculture.
+
+Zhang, H., Sun, H., Tang, Z., & Wang, G. (2025). Integrated agronomy of pea (Pisum sativum L.). Frontiers in Plant Science.
+
+Bewley, J. D., Bradford, K., Hilhorst, H., & Nonogaki, H. (2013). Seeds: Physiology of Development, Germination and Dormancy.
+
+Journal of Plant Physiology (2024). Metabolic control of seed germination in legumes. 
+
+Bewley, J. D., Bradford, K. J., Hilhorst, H. W. M., & Nonogaki, H. (2013).Seeds: Physiology of Development, Germination and Dormancy (3rd ed.). Springer. https://doi.org/10.1007/978-1-4614-4693-4
+
+Lincoln Taiz, Eduardo Zeiger, Ian M. Møller, & Angus Murphy (2015). Plant Physiology and Development (6th ed.). Sinauer Associates. 
+
+William G. Hopkins, & Norman P. A. Hüner (2009). Introduction to Plant Physiology (4th ed.). John Wiley & Sons. 
+
+Emmanuel Liscum, Askinosie, S. K., Leuchtman, D. L., Morrow, J., Willenburg, K. T., & Coats, D. R. (2014).
+
+Phototropism: Growing towards an understanding of plant movement.
+Plant Cell, 26(1), 38–55.
+https://doi.org/10.1105/tpc.113.119727 
+
+
+
+
+
+
+
