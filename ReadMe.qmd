@@ -19,7 +19,7 @@ JHONEYDA EMELIS VERA CAMPOS
 
 ## Reporte _ pagina web
 
-> file:///C:/SEMILLAS_U1_GIT/SEMILLAS_UI_GRUPO2/Pag_web.html
+> https://sanchez25-r.github.io/SEMILLAS_UI_GRUPO2/
 
 
 ⇒ *Documentos REPORTE 1*
